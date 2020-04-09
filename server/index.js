@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const session = require("express-session");
 const path = require("path");
 const morgan = require("morgan");
 const app = express();
@@ -26,9 +27,8 @@ if (process.NODE_ENV === "production") {
 }
 console.debug("using express.json as json parser");
 app.use(express.json());
-console.debug("setting up express-session");
 app.use(
-  require("express-session")({
+  session({
     secret: SESSION_SECRET,
     saveUninitialized: false,
     resave: true,
@@ -51,6 +51,7 @@ if (/^test/.test(NODE_ENV)) {
   }
   massive(DATABASE_URL)
     .then((db) => {
+      app.set("db", db);
       console.log("Database connected! attempting to start server..");
       app.listen(SERVER_PORT, SERVER_HOST, () => {
         console.log(

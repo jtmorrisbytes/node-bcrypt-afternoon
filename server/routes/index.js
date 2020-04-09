@@ -2,8 +2,11 @@ const express = require("express");
 const Router = express.Router;
 const fs = require("fs");
 const path = require("path");
-const rootPath = process.env.API_ROOT || "/api";
+
 const routes = Router();
+
+const { SESSION_SECRET, API_ROOT } = process.env;
+const rootPath = API_ROOT || "/api";
 
 // use this code to dynamically load routers
 fs.readdirSync(__dirname).forEach((entry) => {
@@ -22,6 +25,7 @@ fs.readdirSync(__dirname).forEach((entry) => {
     routes.use(module.basePath, module.router);
   }
 });
+
 module.exports = {
   rootPath,
   router: routes,
