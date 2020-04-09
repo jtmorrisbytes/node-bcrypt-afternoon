@@ -4,7 +4,13 @@ const path = require("path");
 const morgan = require("morgan");
 const app = express();
 const massive = require("massive");
-let { SERVER_HOST, SERVER_PORT, DATABASE_URL, NODE_ENV } = process.env;
+let {
+  SERVER_HOST,
+  SERVER_PORT,
+  DATABASE_URL,
+  NODE_ENV,
+  SESSION_SECRET,
+} = process.env;
 
 SERVER_HOST = SERVER_HOST || "127.0.0.1";
 
@@ -18,7 +24,16 @@ if (process.NODE_ENV === "production") {
   SERVER_PORT = SERVER_PORT || 3001;
   app.use(morgan("dev"));
 }
-
+console.debug("using express.json as json parser");
+app.use(express.json());
+console.debug("setting up express-session");
+app.use(
+  require("express-session")({
+    secret: SESSION_SECRET,
+    saveUninitialized: false,
+    resave: true,
+  })
+);
 console.debug("loading routes...");
 const routes = require("./routes");
 console.debug("Routes module done loading, with result:", routes);
@@ -36,8 +51,11 @@ if (/^test/.test(NODE_ENV)) {
   }
   massive(DATABASE_URL)
     .then((db) => {
+      console.log("Database connected! attempting to start server..");
       app.listen(SERVER_PORT, SERVER_HOST, () => {
-        console.log(`SERVER LISTENING on ${SERVER_HOST}:${SERVER_PORT}`);
+        console.log(
+          `SERVER LISTENING on http://${SERVER_HOST}:${SERVER_PORT}/`
+        );
       });
     })
     .catch((err) => {
