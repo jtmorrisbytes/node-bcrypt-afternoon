@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import './Header.css';
+import React, { Component } from "react";
+import "./Header.css";
+import Axios from "axios";
 
 export default class Header extends Component {
   constructor() {
     super();
     this.state = {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
       isAdmin: false,
     };
     this.register = this.register.bind(this);
@@ -31,8 +32,29 @@ export default class Header extends Component {
     // axios POST to /auth/login here
   }
 
-  register() {
+  async register() {
     // axios POST to /auth/register here
+    try {
+      let result = await Axios.post("/auth/register", {
+        username: this.state.username,
+        password: this.state.password,
+        isAdmin: this.state.isAdmin,
+      });
+      if (result) {
+        console.log(result);
+        if (result.status === 201) {
+          console.log("Successfully registered");
+          this.setState({ username: "", password: "" }, () => {
+            alert("Sucessfully registered");
+          });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      this.setState({ username: "", password: "" });
+      let errObject = JSON.parse(e.request.response);
+      alert(errObject.error);
+    }
   }
 
   logout() {
@@ -58,16 +80,21 @@ export default class Header extends Component {
               type="text"
               placeholder="Username"
               value={username}
-              onChange={e => this.handleUsernameInput(e.target.value)}
+              onChange={(e) => this.handleUsernameInput(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={e => this.handlePasswordInput(e.target.value)}
+              onChange={(e) => this.handlePasswordInput(e.target.value)}
             />
             <div className="adminCheck">
-              <input type="checkbox" id="adminCheckbox" onChange={() => this.toggleAdmin()} /> <span> Admin </span>
+              <input
+                type="checkbox"
+                id="adminCheckbox"
+                onChange={() => this.toggleAdmin()}
+              />{" "}
+              <span> Admin </span>
             </div>
             <button onClick={this.login}>Log In</button>
             <button onClick={this.register} id="reg">
@@ -79,4 +106,3 @@ export default class Header extends Component {
     );
   }
 }
-
