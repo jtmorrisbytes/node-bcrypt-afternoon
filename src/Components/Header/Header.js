@@ -8,7 +8,7 @@ export default class Header extends Component {
     this.state = {
       username: "",
       password: "",
-      isAdmin: false,
+      isAdmin: false
     };
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
@@ -30,6 +30,20 @@ export default class Header extends Component {
 
   login() {
     // axios POST to /auth/login here
+
+    Axios.post(`/auth/login`, {
+      username: this.state.username,
+      password: this.state.password
+    })
+      .then(response => {
+        this.props.updateUser(response.data);
+      })
+      .catch(err => {
+        console.log(err.request);
+        alert(JSON.parse(err.request.response).error);
+        // let errMessage = JSON.parse((err.request.response || {}).error);
+        // alert(errMessage || "An unkown error occurred while trying to log in");
+      });
   }
 
   async register() {
@@ -38,7 +52,7 @@ export default class Header extends Component {
       let result = await Axios.post("/auth/register", {
         username: this.state.username,
         password: this.state.password,
-        isAdmin: this.state.isAdmin,
+        isAdmin: this.state.isAdmin
       });
       if (result) {
         console.log(result);
@@ -59,6 +73,13 @@ export default class Header extends Component {
 
   logout() {
     // axios GET to /auth/logout here
+    Axios.get("/auth/logout")
+      .then(res => {
+        this.props.updatUser({});
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   render() {
@@ -80,13 +101,13 @@ export default class Header extends Component {
               type="text"
               placeholder="Username"
               value={username}
-              onChange={(e) => this.handleUsernameInput(e.target.value)}
+              onChange={e => this.handleUsernameInput(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => this.handlePasswordInput(e.target.value)}
+              onChange={e => this.handlePasswordInput(e.target.value)}
             />
             <div className="adminCheck">
               <input

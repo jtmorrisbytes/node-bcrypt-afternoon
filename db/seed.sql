@@ -5,15 +5,16 @@ CREATE TABLE users
   id SERIAL PRIMARY KEY,
   is_admin BOOLEAN default false,
   username VARCHAR(120),
-  hash text
+  hash text,
+  use_pepper BOOLEAN default true
 );
 
 INSERT INTO users
-(is_admin, username, hash)
+(is_admin, username, hash, use_pepper)
 VALUES
-(true, 'Trogdor', '$2a$10$wZUxoi7vsBOeHK3zhiY4H.Nc5WvuyukqmsGjat9XMGl40w3/RhdiW'),
-(true, 'Blackbeard', '$2a$10$KFR1RUO0JiFtCoux3mnJaemV6Ifnk0BOTdjm/VWh.uOZ97pD3X1Re'),
-(false, 'Skallywag', '$2a$10$dgo.HRAecEhFl8L0h.lJM.OeM2t8y5Pi3AmiBlfCXUIIS/PUtfwd.');
+(true, 'Trogdor', '$2a$10$wZUxoi7vsBOeHK3zhiY4H.Nc5WvuyukqmsGjat9XMGl40w3/RhdiW', false),
+(true, 'Blackbeard', '$2a$10$KFR1RUO0JiFtCoux3mnJaemV6Ifnk0BOTdjm/VWh.uOZ97pD3X1Re',false),
+(false, 'Skallywag', '$2a$10$dgo.HRAecEhFl8L0h.lJM.OeM2t8y5Pi3AmiBlfCXUIIS/PUtfwd.',false);
 
 
 
