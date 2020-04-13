@@ -31,7 +31,7 @@ export default class Header extends Component {
   login() {
     // axios POST to /auth/login here
 
-    Axios.post(`/auth/login`, {
+    Axios.post(`/api/auth/login`, {
       username: this.state.username,
       password: this.state.password
     })
@@ -49,7 +49,7 @@ export default class Header extends Component {
   async register() {
     // axios POST to /auth/register here
     try {
-      let result = await Axios.post("/auth/register", {
+      let result = await Axios.post("/api/auth/register", {
         username: this.state.username,
         password: this.state.password,
         isAdmin: this.state.isAdmin
@@ -73,7 +73,7 @@ export default class Header extends Component {
 
   logout() {
     // axios GET to /auth/logout here
-    Axios.get("/auth/logout")
+    Axios.get("/api/auth/logout")
       .then(res => {
         this.props.updatUser({});
       })

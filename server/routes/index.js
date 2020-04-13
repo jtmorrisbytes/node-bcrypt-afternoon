@@ -5,11 +5,11 @@ const path = require("path");
 
 const routes = Router();
 
-const { SESSION_SECRET, API_ROOT } = process.env;
+const { API_ROOT } = process.env;
 const rootPath = API_ROOT || "/api";
 
 // use this code to dynamically load routers
-fs.readdirSync(__dirname).forEach((entry) => {
+fs.readdirSync(__dirname).forEach(entry => {
   if (
     !path.join(__dirname, entry).endsWith(path.join(__dirname, "index.js")) &&
     (fs.statSync(path.join(__dirname, entry)).isDirectory() ||
@@ -28,5 +28,5 @@ fs.readdirSync(__dirname).forEach((entry) => {
 
 module.exports = {
   rootPath,
-  router: routes,
+  router: routes
 };
