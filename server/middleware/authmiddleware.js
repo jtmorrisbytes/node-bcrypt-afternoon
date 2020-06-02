@@ -6,4 +6,11 @@ module.exports = {
       next();
     }
   },
+  adminsOnly: function(req, res, next) {
+    if ((req.session.user || {}).isAdmin !== true) {
+      res.status(403).json("You must be an admin to perform this action");
+    } else {
+      next();
+    }
+  },
 };

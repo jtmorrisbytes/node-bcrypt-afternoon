@@ -23,4 +23,19 @@ module.exports = {
       .add_user_treasure([treasureURL || "", id]);
     res.status(200).send(userTreasure);
   },
+  getAllTreasure: async function(req, res) {
+    if ((req.session.user || {}).isAdmin == true) {
+      try {
+        res.json(await req.app.get("db").get_all_treasure());
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: e });
+      }
+    } else {
+      console.error(e);
+      res
+        .status(403)
+        .json({ error: "You must be an admin to perform this action" });
+    }
+  },
 };
