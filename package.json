@@ -35,6 +35,7 @@
     "type": "git",
     "url": "git+https://github.com/devlemire/node-auth-afternoon.git"
   },
+  "herokuAppName": "jtmorrisbytes-devmtn",
   "keywords": [],
   "author": "",
   "license": "ISC",

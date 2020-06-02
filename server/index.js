@@ -49,7 +49,21 @@ if (/^test/.test(NODE_ENV)) {
     );
     process.exit(-1);
   }
-  massive(DATABASE_URL)
+  let DbCreds = /^postgres:\/\/([A-Za-z0-9]+)\:([0-9A-Za-z]+)@([A-Za-z0-9\.\-]+):(\d+)\/([a-zA-Z0-9]+)/.exec(
+    DATABASE_URL
+  );
+
+  massive({
+    user: DbCreds[1],
+    password: DbCreds[2],
+    host: DbCreds[3],
+    port: DbCreds[4],
+    database: DbCreds[5],
+    ssl: {
+      mode: "require",
+      rejectUnauthorized: false,
+    },
+  })
     .then((db) => {
       app.set("db", db);
       console.log("Database connected! attempting to start server..");
