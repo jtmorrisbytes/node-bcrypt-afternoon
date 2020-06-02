@@ -40,7 +40,13 @@ export default class Header extends Component {
       })
       .catch((err) => {
         console.log(err.request);
-        alert(JSON.parse(err.request.response).error);
+        try {
+          let parsed = JSON.parse(err.request.response) || "";
+          alert(parsed.error);
+        } catch (e) {
+          console.error(e);
+          alert("An unhandled error occurred while logging in");
+        }
         // let errMessage = JSON.parse((err.request.response || {}).error);
         // alert(errMessage || "An unkown error occurred while trying to log in");
       });
