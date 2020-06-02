@@ -46,6 +46,7 @@ export default class Header extends Component {
         } catch (e) {
           console.error(e);
           alert("An unhandled error occurred while logging in");
+          this.props.updateUser({});
         }
         // let errMessage = JSON.parse((err.request.response || {}).error);
         // alert(errMessage || "An unkown error occurred while trying to log in");

@@ -22,11 +22,18 @@ export default class Container extends Component {
     // axios GET to /api/treasure/dragon here
     Axios.get("/api/treasure/dragon")
       .then((res) => {
-        this.setState({ ...this.state, treasures: { dragon: res.data } });
+        this.setState({
+          ...this.state,
+          treasures: { ...this.state.treasures, dragon: res.data },
+        });
       })
       .catch((e) => {
         console.error(e);
         alert("an unhandled error occurred while getting dragons treasure");
+        this.setState({
+          ...this.state,
+          treasures: { ...this.state.treasures, dragon: [] },
+        });
       });
   }
 
@@ -36,6 +43,28 @@ export default class Container extends Component {
 
   getMyTreasure() {
     // axios GET to /api/treasure/user here
+    Axios.get("/api/treasure/user")
+      .then((response) => {
+        this.setState({
+          ...this.state,
+          treasures: { ...this.state.treasures, user: response.data },
+        });
+      })
+      .catch((e) => {
+        try {
+          let parsed = JSON.parse(e.response.request.response);
+          alert(parsed.error || "an unknown error occurred");
+        } catch (e) {
+          alert(
+            "an unhandled error occurred while retrieving the users treasure"
+          );
+          console.log(e);
+          this.setState({
+            ...this.state,
+            treasures: { ...this.state.treasures, user: [] },
+          });
+        }
+      });
   }
 
   addMyTreasure(newMyTreasure) {
