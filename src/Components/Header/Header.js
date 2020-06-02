@@ -8,7 +8,7 @@ export default class Header extends Component {
     this.state = {
       username: "",
       password: "",
-      isAdmin: false
+      isAdmin: false,
     };
     this.register = this.register.bind(this);
     this.login = this.login.bind(this);
@@ -33,12 +33,12 @@ export default class Header extends Component {
 
     Axios.post(`/api/auth/login`, {
       username: this.state.username,
-      password: this.state.password
+      password: this.state.password,
     })
-      .then(response => {
+      .then((response) => {
         this.props.updateUser(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.request);
         alert(JSON.parse(err.request.response).error);
         // let errMessage = JSON.parse((err.request.response || {}).error);
@@ -52,7 +52,7 @@ export default class Header extends Component {
       let result = await Axios.post("/api/auth/register", {
         username: this.state.username,
         password: this.state.password,
-        isAdmin: this.state.isAdmin
+        isAdmin: this.state.isAdmin,
       });
       if (result) {
         console.log(result);
@@ -73,11 +73,11 @@ export default class Header extends Component {
 
   logout() {
     // axios GET to /auth/logout here
-    Axios.get("/api/auth/logout")
-      .then(res => {
-        this.props.updatUser({});
+    Axios.post("/api/auth/logout")
+      .then((res) => {
+        this.props.updateUser({});
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
   }
@@ -101,13 +101,13 @@ export default class Header extends Component {
               type="text"
               placeholder="Username"
               value={username}
-              onChange={e => this.handleUsernameInput(e.target.value)}
+              onChange={(e) => this.handleUsernameInput(e.target.value)}
             />
             <input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={e => this.handlePasswordInput(e.target.value)}
+              onChange={(e) => this.handlePasswordInput(e.target.value)}
             />
             <div className="adminCheck">
               <input
