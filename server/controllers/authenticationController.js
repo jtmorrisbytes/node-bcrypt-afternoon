@@ -21,7 +21,7 @@ module.exports = {
         req.session.user = req.session.user || {};
         req.session.user.isAdmin = user.is_admin;
         req.session.user.username = user.username;
-        res.status(201);
+        res.status(201).json(req.session.user);
       } catch (e) {
         console.error(e);
         try {

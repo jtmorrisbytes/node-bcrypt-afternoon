@@ -53,29 +53,24 @@ export default class Header extends Component {
       });
   }
 
-  async register() {
+  register() {
     // axios POST to /auth/register here
-    try {
-      let result = await Axios.post("/api/auth/register", {
-        username: this.state.username,
-        password: this.state.password,
-        isAdmin: this.state.isAdmin,
+    Axios.post("/api/auth/register", {
+      username: this.state.username,
+      password: this.state.password,
+      isAdmin: this.state.isAdmin,
+    })
+      .then((result) => {
+        console.log("Successfully registered");
+        this.setState({ username: "", password: "" }, () => {
+          alert("Sucessfully registered");
+        });
+      })
+      .catch((e) => {
+        this.setState({ username: "", password: "" });
+        let errObject = JSON.parse(e.request.response);
+        alert(errObject.error);
       });
-      if (result) {
-        console.log(result);
-        if (result.status === 201) {
-          console.log("Successfully registered");
-          this.setState({ username: "", password: "" }, () => {
-            alert("Sucessfully registered");
-          });
-        }
-      }
-    } catch (e) {
-      console.error(e);
-      this.setState({ username: "", password: "" });
-      let errObject = JSON.parse(e.request.response);
-      alert(errObject.error);
-    }
   }
 
   logout() {

@@ -39,6 +39,24 @@ export default class Container extends Component {
 
   getAllTreasure() {
     // axios GET to /api/treasure/all here
+    Axios.get("/api/treasure/all")
+      .then((response) => {
+        this.setState({
+          ...this.state,
+          treasures: { ...this.state.treasures, all: response.data },
+        });
+      })
+      .catch((e) => {
+        try {
+          let parsed = JSON.parse(e.response.request.response);
+          alert(parsed.error);
+        } catch (e) {
+          console.error(e);
+          alert(
+            "an unhandled exception occurred while getting all the treasure"
+          );
+        }
+      });
   }
 
   getMyTreasure() {
