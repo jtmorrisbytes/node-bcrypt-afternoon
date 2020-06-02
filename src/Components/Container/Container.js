@@ -1,24 +1,33 @@
-import React, { Component } from 'react'
-import './Container.css'
-import Treasure from '../Treasure'
+import React, { Component } from "react";
+import "./Container.css";
+import Treasure from "../Treasure";
+import Axios from "axios";
 
 export default class Container extends Component {
   constructor() {
-    super()
+    super();
     this.state = {
       treasures: {},
-    }
-    this.addMyTreasure = this.addMyTreasure.bind(this)
+    };
+    this.addMyTreasure = this.addMyTreasure.bind(this);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps !== this.props) {
-      this.setState({ treasures: {} })
+      this.setState({ treasures: {} });
     }
   }
 
   getDragonTreasure() {
     // axios GET to /api/treasure/dragon here
+    Axios.get("/api/treasure/dragon")
+      .then((res) => {
+        this.setState({ ...this.state, treasures: { dragon: res.data } });
+      })
+      .catch((e) => {
+        console.error(e);
+        alert("an unhandled error occurred while getting dragons treasure");
+      });
   }
 
   getAllTreasure() {
@@ -35,12 +44,12 @@ export default class Container extends Component {
         ...this.state.treasures,
         user: newMyTreasure,
       },
-    })
+    });
   }
 
   render() {
-    const { username } = this.props.user
-    const { dragon, user, all } = this.state.treasures
+    const { username } = this.props.user;
+    const { dragon, user, all } = this.state.treasures;
     return (
       <div className="Container">
         {dragon ? (
@@ -102,6 +111,6 @@ export default class Container extends Component {
           </div>
         )}
       </div>
-    )
+    );
   }
 }
